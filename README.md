@@ -92,3 +92,9 @@ npm install
 ```shell
 npm run start
 ```
+
+**3. Run tests**
+
+```shell
+npm run test
+```
