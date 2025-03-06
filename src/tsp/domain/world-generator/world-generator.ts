@@ -72,7 +72,7 @@ export class WorldGenerator {
     }
 
     /**
-     * Generates a sequence of unique an random coordinates within the defined
+     * Generates a sequence of unique and random coordinates within the defined
      * world bounds.
      */
     private generateCoordinates(): Coordinates[] {
