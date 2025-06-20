@@ -1,14 +1,26 @@
-import { Module } from '@nestjs/common';
-import { TspController } from './controllers/tsp.controller';
-import { TspService } from './tsp.service';
+import { Module } from '@nestjs/common'
+import { TspController } from './controllers/tsp.controller'
+import { TspService } from './tsp.service'
 
 /**
- * The TspModule class is a NestJS module that encapsulates the components
- * related to solving the Traveling Salesman Problem (TSP). It organizes the
- * TspController and TspService.
+ * Módulo de NestJS que encapsula los componentes relacionados con
+ * la resolución del Problema del Viajante (TSP).
  *
- * NestJS modules are also responsible for dependency injetion (DI)
- * resolution within their scope.
+ * Este módulo organiza y agrupa el TspController y TspService,
+ * proporcionando una estructura modular y mantenible para la
+ * funcionalidad TSP de la aplicación.
+ *
+ * Los módulos de NestJS también son responsables de la resolución
+ * de inyección de dependencias (DI) dentro de su alcance.
+ *
+ * @class TspModule
+ * @author Ian Ayala González
+ * @version 1.0.0
+ * @since 1.0.0
+ *
+ * @example
+ * // Uso en la aplicación principal
+ * const app = await NestFactory.create(TspModule);
  */
 @Module({
     imports: [],

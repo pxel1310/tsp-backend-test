@@ -1,114 +1,104 @@
-import { World, Bounds } from './world';
-import { City, Coordinates } from './city';
+import { World, type Bounds } from './world'
+import { City, type Coordinates } from './city'
 
+/**
+ * Generador de mundos que crea conjuntos aleatorios de ciudades
+ * con nombres únicos y coordenadas distribuidas aleatoriamente.
+ *
+ * Esta clase es responsable de generar escenarios de prueba para
+ * el problema TSP, creando ciudades con nombres alfabéticos únicos
+ * y coordenadas aleatorias dentro de límites especificados.
+ *
+ * Características:
+ * - Nombres de ciudades usando sistema base-26 (A, B, ..., Z, AA, AB, ...)
+ * - Coordenadas únicas generadas aleatoriamente
+ * - Validación de límites del mundo
+ * - Algoritmo Fisher-Yates para distribución uniforme
+ *
+ * @class WorldGenerator
+ * @author Ian Ayala González
+ * @version 1.0.0
+ * @since 1.0.0
+ *
+ * @example
+ * const generator = new WorldGenerator(5, { x: 100, y: 100 });
+ * generator.generateCities();
+ * const world = generator.getWorld();
+ * console.log(world.cities); // [City('A', {x: 23, y: 67}), ...]
+ */
 export class WorldGenerator {
-    private readonly ASCII_CHARCODE_A = 65;
-    private readonly ENGLISH_ALPHABET_LENGTH = 26;
-    private world: World;
+  private readonly ASCII_A = 65
+  private readonly ALPHABET_LEN = 26
+  private world: World
 
-    constructor(
-        private readonly numOfCities: number,
-        private readonly bounds: Bounds,
-    ) {
-        if (numOfCities > bounds.x * bounds.y) {
-            throw new NumOfCitiesExceedWorldBoundsError(numOfCities);
-        }
-
-        this.world = new World(this.bounds);
+  constructor(
+    private readonly numOfCities: number,
+    private readonly bounds: Bounds,
+  ) {
+    const maxCapacity = (bounds.x + 1) * (bounds.y + 1)
+    if (numOfCities > maxCapacity) {
+      throw new NumOfCitiesExceedWorldBoundsError(numOfCities)
     }
 
-    getWorld(): World {
-        return this.world;
+    this.world = new World(bounds)
+  }
+
+  /** Retorna el mundo actual */
+  getWorld(): World {
+    return this.world
+  }
+
+  /** Genera ciudades con nombres y coordenadas únicas */
+  generateCities(): void {
+    const names = this.generateCityNames()
+    const coords = this.generateUniqueCoordinates()
+    this.world = new World(this.bounds)
+
+    for (let i = 0; i < this.numOfCities; i++) {
+      this.world.addCity(new City(names[i], coords[i]))
     }
+  }
 
-    /**
-     * Generates and adds a set of cities to the world, ensuring unique names
-     * and coordinates for each city.
-     *
-     * - Resets the world to discard previously generated cities.
-     */
-    generateCities(): void {
-        const ALPHABET = this.generateAlphabet();
-        const COORDINATES = this.generateCoordinates();
-        this.world = new World(this.bounds);
+  /** Genera nombres únicos estilo Excel: A-Z, AA, AB... */
+  private generateCityNames(): string[] {
+    const toLabel = (n: number): string =>
+      n < 0
+        ? ''
+        : toLabel(Math.floor(n / this.ALPHABET_LEN) - 1) +
+          String.fromCharCode(this.ASCII_A + (n % this.ALPHABET_LEN))
 
-        for (let i = 0; i < this.numOfCities; i++) {
-            this.world.addCity(new City(ALPHABET[i], COORDINATES[i]));
-        }
-    }
+    return Array.from({ length: this.numOfCities }, (_, i) => toLabel(i))
+  }
 
-    /**
-     * Generates a sequence of unique alphabetical labels for city names.
-     * Labels are created using a base-26-like numbering system, where 'A' to
-     * 'Z' represent the first 26 entries, followed by combinations like 'AA',
-     * 'AB', 'AC', etc.
-     *
-     * - Example sequence:
-     *   1 → 'A', 2 → 'B', ..., 26 → 'Z', 27 → 'AA', 28 → 'AB', ..., 52 → 'AZ', 53 → 'BA'
-     */
-    private generateAlphabet(): string[] {
-        const alphabet: string[] = [];
+  /** Genera coordenadas únicas dentro de los límites del mundo */
+  private generateUniqueCoordinates(): Coordinates[] {
+    const xs = this.fisherYatesShuffle(
+      Array.from({ length: this.bounds.x + 1 }, (_, i) => i),
+    )
+    const ys = this.fisherYatesShuffle(
+      Array.from({ length: this.bounds.y + 1 }, (_, i) => i),
+    )
 
-        const createLabelFromPointer = (pointer: number): string =>
-            String.fromCharCode(
-                this.ASCII_CHARCODE_A +
-                    (pointer % this.ENGLISH_ALPHABET_LENGTH),
-            );
+    return Array.from({ length: this.numOfCities }, (_, i) => ({
+      x: xs[i],
+      y: ys[i],
+    }))
+  }
 
-        for (let i = 0; i < this.numOfCities; i++) {
-            let label = '';
-            let pointer = i;
-
-            while (pointer >= 0) {
-                label = createLabelFromPointer(pointer) + label;
-                pointer =
-                    Math.floor(pointer / this.ENGLISH_ALPHABET_LENGTH) - 1;
-            }
-
-            alphabet.push(label);
-        }
-
-        return alphabet;
-    }
-
-    /**
-     * Generates a sequence of unique and random coordinates within the defined
-     * world bounds.
-     */
-    private generateCoordinates(): Coordinates[] {
-        const coordinatesSet: Coordinates[] = [];
-
-        const spaceInX = this.fisherYatesShuffle(
-            Array.from({ length: this.world.bounds.x + 1 }, (_, i) => i),
-        );
-
-        const spaceInY = this.fisherYatesShuffle(
-            Array.from({ length: this.world.bounds.y + 1 }, (_, i) => i),
-        );
-
-        for (let i = 0; i < this.numOfCities; i++) {
-            coordinatesSet.push({ x: spaceInX[i], y: spaceInY[i] });
-        }
-
-        return coordinatesSet;
-    }
-
-    /**
-     * Randomly shuffles an array in place using the Fisher-Yates algorithm.
-     * Ensures an unbiased, uniform shuffle distribution.
-     */
-    private fisherYatesShuffle(array: number[]): number[] {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-
-        return array;
-    }
+  /** Mezcla un array usando el algoritmo Fisher-Yates */
+  private fisherYatesShuffle<T>(array: T[]): T[] {
+    return array
+      .map((value) => ({ value, sortKey: Math.random() }))
+      .sort((a, b) => a.sortKey - b.sortKey)
+      .map(({ value }) => value)
+  }
 }
 
+/**
+ * Error cuando el número de ciudades excede la capacidad del mundo
+ */
 class NumOfCitiesExceedWorldBoundsError extends Error {
-    constructor(numOfCities: number) {
-        super(`World's bounds aren’t big enough to fit ${numOfCities} cities.`);
-    }
+  constructor(numOfCities: number) {
+    super(`Los límites del mundo no permiten generar ${numOfCities} ciudades.`)
+  }
 }
