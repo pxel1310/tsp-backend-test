@@ -1,0 +1,349 @@
+{
+  "info": {
+    "name": "TSP Solver API",
+    "description": "API para resolver el Problema del Viajante (TSP) y generar ciudades aleatorias",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        },
+        "description": "Verifica el estado del servidor y muestra información básica"
+      },
+      "response": [
+        {
+          "name": "Health Check Success",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"status\": \"OK\",\n  \"timestamp\": \"2024-01-15T10:30:00.000Z\",\n  \"service\": \"API Solucionador TSP\",\n  \"version\": \"1.0.0\",\n  \"endpoints\": {\n    \"solve\": \"/api/tsp/solve\",\n    \"generateCities\": \"/api/tsp/generate-cities\"\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Generar Ciudades Aleatorias",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"numOfCities\": 5,\n  \"worldBoundX\": 100,\n  \"worldBoundY\": 100\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/tsp/generate-cities",
+          "host": ["{{baseUrl}}"],
+          "path": ["tsp", "generate-cities"]
+        },
+        "description": "Genera un conjunto aleatorio de ciudades con coordenadas únicas y calcula las distancias euclidianas entre todas las parejas"
+      },
+      "response": [
+        {
+          "name": "Generate Cities Success",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numOfCities\": 5,\n  \"worldBoundX\": 100,\n  \"worldBoundY\": 100\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tsp/generate-cities",
+              "host": ["{{baseUrl}}"],
+              "path": ["tsp", "generate-cities"]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"cities\": [\"A\", \"B\", \"C\", \"D\", \"E\"],\n  \"distances\": [\n    { \"from\": \"A\", \"to\": \"B\", \"distance\": 45.23 },\n    { \"from\": \"B\", \"to\": \"A\", \"distance\": 45.23 },\n    { \"from\": \"A\", \"to\": \"C\", \"distance\": 67.89 },\n    { \"from\": \"C\", \"to\": \"A\", \"distance\": 67.89 },\n    { \"from\": \"A\", \"to\": \"D\", \"distance\": 32.15 },\n    { \"from\": \"D\", \"to\": \"A\", \"distance\": 32.15 },\n    { \"from\": \"A\", \"to\": \"E\", \"distance\": 78.45 },\n    { \"from\": \"E\", \"to\": \"A\", \"distance\": 78.45 },\n    { \"from\": \"B\", \"to\": \"C\", \"distance\": 56.78 },\n    { \"from\": \"C\", \"to\": \"B\", \"distance\": 56.78 },\n    { \"from\": \"B\", \"to\": \"D\", \"distance\": 23.67 },\n    { \"from\": \"D\", \"to\": \"B\", \"distance\": 23.67 },\n    { \"from\": \"B\", \"to\": \"E\", \"distance\": 89.12 },\n    { \"from\": \"E\", \"to\": \"B\", \"distance\": 89.12 },\n    { \"from\": \"C\", \"to\": \"D\", \"distance\": 41.33 },\n    { \"from\": \"D\", \"to\": \"C\", \"distance\": 41.33 },\n    { \"from\": \"C\", \"to\": \"E\", \"distance\": 65.44 },\n    { \"from\": \"E\", \"to\": \"C\", \"distance\": 65.44 },\n    { \"from\": \"D\", \"to\": \"E\", \"distance\": 52.89 },\n    { \"from\": \"E\", \"to\": \"D\", \"distance\": 52.89 }\n  ]\n}"
+        },
+        {
+          "name": "Generate Cities Error - Invalid Input",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numOfCities\": \"invalid\",\n  \"worldBoundX\": 100,\n  \"worldBoundY\": 100\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tsp/generate-cities",
+              "host": ["{{baseUrl}}"],
+              "path": ["tsp", "generate-cities"]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"statusCode\": 400,\n  \"message\": [\n    \"numOfCities must be a number conforming to the specified constraints\"\n  ],\n  \"error\": \"Bad Request\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Resolver TSP - Ejemplo Simple",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cities\": [\"A\", \"B\", \"C\"],\n  \"distances\": [\n    { \"from\": \"A\", \"to\": \"B\", \"distance\": 10 },\n    { \"from\": \"B\", \"to\": \"A\", \"distance\": 10 },\n    { \"from\": \"A\", \"to\": \"C\", \"distance\": 15 },\n    { \"from\": \"C\", \"to\": \"A\", \"distance\": 15 },\n    { \"from\": \"B\", \"to\": \"C\", \"distance\": 20 },\n    { \"from\": \"C\", \"to\": \"B\", \"distance\": 20 }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/tsp/solve",
+          "host": ["{{baseUrl}}"],
+          "path": ["tsp", "solve"]
+        },
+        "description": "Resuelve un problema TSP simple con 3 ciudades"
+      },
+      "response": [
+        {
+          "name": "Solve TSP Success",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cities\": [\"A\", \"B\", \"C\"],\n  \"distances\": [\n    { \"from\": \"A\", \"to\": \"B\", \"distance\": 10 },\n    { \"from\": \"B\", \"to\": \"A\", \"distance\": 10 },\n    { \"from\": \"A\", \"to\": \"C\", \"distance\": 15 },\n    { \"from\": \"C\", \"to\": \"A\", \"distance\": 15 },\n    { \"from\": \"B\", \"to\": \"C\", \"distance\": 20 },\n    { \"from\": \"C\", \"to\": \"B\", \"distance\": 20 }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tsp/solve",
+              "host": ["{{baseUrl}}"],
+              "path": ["tsp", "solve"]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"route\": [\"A\", \"B\", \"C\", \"A\"],\n  \"totalDistance\": 4500\n}"
+        }
+      ]
+    },
+    {
+      "name": "Resolver TSP - Ejemplo Complejo",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cities\": [\"Madrid\", \"Barcelona\", \"Valencia\", \"Sevilla\", \"Bilbao\"],\n  \"distances\": [\n    { \"from\": \"Madrid\", \"to\": \"Barcelona\", \"distance\": 621 },\n    { \"from\": \"Barcelona\", \"to\": \"Madrid\", \"distance\": 621 },\n    { \"from\": \"Madrid\", \"to\": \"Valencia\", \"distance\": 357 },\n    { \"from\": \"Valencia\", \"to\": \"Madrid\", \"distance\": 357 },\n    { \"from\": \"Madrid\", \"to\": \"Sevilla\", \"distance\": 534 },\n    { \"from\": \"Sevilla\", \"to\": \"Madrid\", \"distance\": 534 },\n    { \"from\": \"Madrid\", \"to\": \"Bilbao\", \"distance\": 395 },\n    { \"from\": \"Bilbao\", \"to\": \"Madrid\", \"distance\": 395 },\n    { \"from\": \"Barcelona\", \"to\": \"Valencia\", \"distance\": 349 },\n    { \"from\": \"Valencia\", \"to\": \"Barcelona\", \"distance\": 349 },\n    { \"from\": \"Barcelona\", \"to\": \"Sevilla\", \"distance\": 997 },\n    { \"from\": \"Sevilla\", \"to\": \"Barcelona\", \"distance\": 997 },\n    { \"from\": \"Barcelona\", \"to\": \"Bilbao\", \"distance\": 620 },\n    { \"from\": \"Bilbao\", \"to\": \"Barcelona\", \"distance\": 620 },\n    { \"from\": \"Valencia\", \"to\": \"Sevilla\", \"distance\": 652 },\n    { \"from\": \"Sevilla\", \"to\": \"Valencia\", \"distance\": 652 },\n    { \"from\": \"Valencia\", \"to\": \"Bilbao\", \"distance\": 567 },\n    { \"from\": \"Bilbao\", \"to\": \"Valencia\", \"distance\": 567 },\n    { \"from\": \"Sevilla\", \"to\": \"Bilbao\", \"distance\": 933 },\n    { \"from\": \"Bilbao\", \"to\": \"Sevilla\", \"distance\": 933 }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/tsp/solve",
+          "host": ["{{baseUrl}}"],
+          "path": ["tsp", "solve"]
+        },
+        "description": "Resuelve un problema TSP con ciudades españolas y distancias reales"
+      },
+      "response": [
+        {
+          "name": "Solve TSP Complex Success",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cities\": [\"Madrid\", \"Barcelona\", \"Valencia\", \"Sevilla\", \"Bilbao\"],\n  \"distances\": [\n    { \"from\": \"Madrid\", \"to\": \"Barcelona\", \"distance\": 621 },\n    { \"from\": \"Barcelona\", \"to\": \"Madrid\", \"distance\": 621 },\n    { \"from\": \"Madrid\", \"to\": \"Valencia\", \"distance\": 357 },\n    { \"from\": \"Valencia\", \"to\": \"Madrid\", \"distance\": 357 },\n    { \"from\": \"Madrid\", \"to\": \"Sevilla\", \"distance\": 534 },\n    { \"from\": \"Sevilla\", \"to\": \"Madrid\", \"distance\": 534 },\n    { \"from\": \"Madrid\", \"to\": \"Bilbao\", \"distance\": 395 },\n    { \"from\": \"Bilbao\", \"to\": \"Madrid\", \"distance\": 395 },\n    { \"from\": \"Barcelona\", \"to\": \"Valencia\", \"distance\": 349 },\n    { \"from\": \"Valencia\", \"to\": \"Barcelona\", \"distance\": 349 },\n    { \"from\": \"Barcelona\", \"to\": \"Sevilla\", \"distance\": 997 },\n    { \"from\": \"Sevilla\", \"to\": \"Barcelona\", \"distance\": 997 },\n    { \"from\": \"Barcelona\", \"to\": \"Bilbao\", \"distance\": 620 },\n    { \"from\": \"Bilbao\", \"to\": \"Barcelona\", \"distance\": 620 },\n    { \"from\": \"Valencia\", \"to\": \"Sevilla\", \"distance\": 652 },\n    { \"from\": \"Sevilla\", \"to\": \"Valencia\", \"distance\": 652 },\n    { \"from\": \"Valencia\", \"to\": \"Bilbao\", \"distance\": 567 },\n    { \"from\": \"Bilbao\", \"to\": \"Valencia\", \"distance\": 567 },\n    { \"from\": \"Sevilla\", \"to\": \"Bilbao\", \"distance\": 933 },\n    { \"from\": \"Bilbao\", \"to\": \"Sevilla\", \"distance\": 933 }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tsp/solve",
+              "host": ["{{baseUrl}}"],
+              "path": ["tsp", "solve"]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"route\": [\"Madrid\", \"Valencia\", \"Barcelona\", \"Bilbao\", \"Sevilla\", \"Madrid\"],\n  \"totalDistance\": 287800\n}"
+        }
+      ]
+    },
+    {
+      "name": "Resolver TSP - Error Datos Faltantes",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cities\": [\"A\", \"B\", \"C\"],\n  \"distances\": [\n    { \"from\": \"A\", \"to\": \"B\", \"distance\": 10 }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/tsp/solve",
+          "host": ["{{baseUrl}}"],
+          "path": ["tsp", "solve"]
+        },
+        "description": "Ejemplo de error cuando faltan distancias entre ciudades"
+      },
+      "response": [
+        {
+          "name": "Solve TSP Error - Missing Distances",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cities\": [\"A\", \"B\", \"C\"],\n  \"distances\": [\n    { \"from\": \"A\", \"to\": \"B\", \"distance\": 10 }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tsp/solve",
+              "host": ["{{baseUrl}}"],
+              "path": ["tsp", "solve"]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"statusCode\": 400,\n  \"message\": \"Faltan distancias entre algunas ciudades\",\n  \"error\": \"Bad Request\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Flujo Completo - Generar y Resolver",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"numOfCities\": 4,\n  \"worldBoundX\": 50,\n  \"worldBoundY\": 50\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/tsp/generate-cities",
+          "host": ["{{baseUrl}}"],
+          "path": ["tsp", "generate-cities"]
+        },
+        "description": "Primer paso: Generar ciudades aleatorias para luego resolver el TSP"
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ]
+}
