@@ -2,7 +2,16 @@ import { NestFactory } from '@nestjs/core'
 import { TspModule } from './tsp/tsp.module'
 import { Logger, ValidationPipe, type INestApplication } from '@nestjs/common'
 
-process.loadEnvFile()
+// Ajuste para permitir el uso de variables de entorno en desarrollo
+if (process.env.NODE_ENV !== 'production') {
+  try {
+    import('dotenv').then((dotenv) => dotenv.config({ path: '.env' }))
+  } catch (e) {
+    Logger.warn(
+      '⚠️ No se pudo cargar el archivo .env (no es crítico en producción)',
+    )
+  }
+}
 
 /**
  * Clase servidor que inicializa y ejecuta el servidor de la API del Solucionador TSP.
